@@ -11,7 +11,7 @@ const DeleteModal = ({ isOpen, onClose, onConfirm, selectedCount }) => {
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
         <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
         <p className="mb-6">
-          Are you sure you want to delete {selectedCount} selected {selectedCount === 1 ? 'item' : 'items'}? 
+          Are you sure you want to delete {selectedCount} selected {selectedCount === 1 ? 'item' : 'items'}?
           This action cannot be undone.
         </p>
         <div className="flex justify-end gap-4">
@@ -58,7 +58,7 @@ const Dashboard = () => {
         headers: { Authorization: `${token}` },
       });
 
-      const sortedData = response.data.sort((a, b) => 
+      const sortedData = response.data.sort((a, b) =>
         new Date(b.createdAt) - new Date(a.createdAt)
       );
 
@@ -109,8 +109,8 @@ const Dashboard = () => {
   };
 
   const handleRowSelect = (id) => {
-    setSelectedRows(prev => 
-      prev.includes(id) 
+    setSelectedRows(prev =>
+      prev.includes(id)
         ? prev.filter(rowId => rowId !== id)
         : [...prev, id]
     );
@@ -141,11 +141,10 @@ const Dashboard = () => {
             <button
               key={role}
               onClick={() => setRoleFilter(role)}
-              className={`px-3 py-1 mr-2 rounded ${
-                roleFilter === role 
-                  ? 'bg-blue-500 text-white' 
-                  : 'bg-gray-200 text-gray-700'
-              }`}
+              className={`px-3 py-1 mr-2 rounded ${roleFilter === role
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200 text-gray-700'
+                }`}
             >
               {role}
             </button>
@@ -156,21 +155,19 @@ const Dashboard = () => {
           <label className="mr-2">Sort Order:</label>
           <button
             onClick={() => setSortOrder('newest')}
-            className={`px-3 py-1 mr-2 rounded ${
-              sortOrder === 'newest' 
-                ? 'bg-blue-500 text-white' 
-                : 'bg-gray-200 text-gray-700'
-            }`}
+            className={`px-3 py-1 mr-2 rounded ${sortOrder === 'newest'
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-200 text-gray-700'
+              }`}
           >
             Newest First
           </button>
           <button
             onClick={() => setSortOrder('oldest')}
-            className={`px-3 py-1 rounded ${
-              sortOrder === 'oldest' 
-                ? 'bg-blue-500 text-white' 
-                : 'bg-gray-200 text-gray-700'
-            }`}
+            className={`px-3 py-1 rounded ${sortOrder === 'oldest'
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-200 text-gray-700'
+              }`}
           >
             Oldest First
           </button>
@@ -223,7 +220,8 @@ const Dashboard = () => {
                   <td className="px-4 py-2">{form.email}</td>
                   <td className="px-4 py-2">{form.phone}</td>
                   <td className="px-4 py-2">{form.role}</td>
-                  <td className="px-4 py-2">{form.query || 'N/A'}</td>
+                  <td className="px-4 py-2"><div className="query-cell">{form.query || 'N/A'}</div>
+                  </td>
                   <td className="px-4 py-2">
                     {form.linkedin_url ? (
                       <a
@@ -252,12 +250,45 @@ const Dashboard = () => {
       </div>
 
       {/* Delete Confirmation Modal */}
-      <DeleteModal 
+      <DeleteModal
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
         onConfirm={handleDelete}
         selectedCount={selectedRows.length}
       />
+
+      {/* Add CSS for the Query cell */}
+      <style>
+        {`
+          .query-cell {
+            max-width: 300px; 
+            overflow-x: auto;
+            white-space: nowrap;
+          }
+
+/* Thin scrollbar for WebKit browsers (Chrome, Safari) */
+          .query-cell::-webkit-scrollbar {
+            width: 1px; /* Adjust the width to make it thinner */
+            height: 1px; /* Adjust the height for horizontal scrollbar */
+          }
+
+          .query-cell::-webkit-scrollbar-thumb {
+            background-color: #888; /* Color of the scrollbar thumb */
+            border-radius: 1px; /* Rounded corners for the thumb */
+          }
+
+          .query-cell::-webkit-scrollbar-track {
+            background-color: #f1f1f1; /* Color of the scrollbar track */
+          }
+
+          /* Thin scrollbar for Firefox */
+          .query-cell {
+            scrollbar-width: thin; /* Makes the scrollbar thinner */
+            scrollbar-color: #888 #f1f1f1; /* Thumb and track color */
+          }
+
+        `}
+      </style>
     </div>
   );
 };
