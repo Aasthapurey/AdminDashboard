@@ -15,7 +15,7 @@ const LoginForm = () => {
       const response = await axios.post('https://coderhouse-448820.el.r.appspot.com/Admin/login', { username, password });
 
       localStorage.setItem('authToken', response.data.token);
-      navigate('/dashboard');
+      navigate('/appointments');
     } catch (error) {
       console.error(error);
       setErrorMessage(error.response?.data?.message || 'An error occurred.');
