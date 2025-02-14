@@ -54,12 +54,12 @@ const AppointmentDashboard = () => {
       const token = localStorage.getItem('authToken');
       if (!token) return;
 
-      const response = await apiClient.get('https://coderhouse-448820.el.r.appspot.com/Appointment/', {
+      const response1 = await apiClient.get('https://coderhouse-448820.el.r.appspot.com/Appointment/', {
         headers: { Authorization: `${token}` },
       });
-
-      const sortedData = response.data.sort((a, b) =>
-        new Date(b.createdAt) - new Date(a.createdAt)
+      console.log(response1.data);
+      const sortedData = response1.data.sort((a, b) =>
+        new Date(b.appointment_date) - new Date(a.appointment_date)
       );
 
       setAppointments(sortedData);
@@ -77,13 +77,13 @@ const AppointmentDashboard = () => {
     let result = appointments;
 
     if (mentorFilter !== 'All') {
-      result = result.filter(appointment => appointment.mentorDomain === mentorFilter);
+      result = result.filter(appointment => appointment.mentor_domain === mentorFilter);
     }
 
     if (sortOrder === 'newest') {
-      result.sort((a, b) => new Date(b.appointmentDate) - new Date(a.appointmentDate));
+      result.sort((a, b) => new Date(b.appointment_date) - new Date(a.appointment_date));
     } else {
-      result.sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate));
+      result.sort((a, b) => new Date(a.appointment_date) - new Date(b.appointment_date));
     }
 
     setFilteredAppointments(result);
@@ -124,7 +124,7 @@ const AppointmentDashboard = () => {
   };
 
   const getMentorDomains = () => {
-    const domains = ['All', ...new Set(appointments.map(appointment => appointment.mentorDomain))];
+    const domains = ['All', ...new Set(appointments.map(appointment => appointment.mentor_domain))];
     return domains;
   };
 
@@ -220,14 +220,14 @@ const AppointmentDashboard = () => {
                     />
                   </td>
                   <td className="px-4 py-2">{index + 1}</td>
-                  <td className="px-4 py-2">{appointment.fullName}</td>
+                  <td className="px-4 py-2">{appointment.name}</td>
                   <td className="px-4 py-2">{appointment.email}</td>
                   <td className="px-4 py-2">{appointment.phone}</td>
-                  <td className="px-4 py-2">{appointment.courseBranch}</td>
-                  <td className="px-4 py-2">{appointment.yearOfStudy}</td>
-                  <td className="px-4 py-2">{appointment.mentorDomain}</td>
+                  <td className="px-4 py-2">{appointment.branch_course}</td>
+                  <td className="px-4 py-2">{appointment.study_year}</td>
+                  <td className="px-4 py-2">{appointment.mentor_domain}</td>
                   <td className="px-4 py-2">
-                    {new Date(appointment.appointmentDate).toLocaleString()}
+                    {new Date(appointment.appointment_date).toLocaleString()}
                   </td>
                   <td className="px-4 py-2">
                     <div className="query-cell">{appointment.query || 'N/A'}</div>
