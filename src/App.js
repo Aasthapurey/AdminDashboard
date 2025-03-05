@@ -5,7 +5,7 @@ import Navigation from './components/Navigation';
 import AdminDashboard from './components/AdminDashboard';
 import AppointmentDashboard from './components/AppointmentDashboard';
 import AppointmentForm from './components/AppointmentForm';
-
+import ImageSection from './components/ImageSection';
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('authToken');
@@ -45,6 +45,11 @@ function App() {
         <Route path="/book-appointment" element={
           <ProtectedRoute>
             <AppointmentForm />
+          </ProtectedRoute>
+        } />
+        <Route path="/imagesection" element={
+          <ProtectedRoute>
+            <ImageSection />
           </ProtectedRoute>
         } />
 
