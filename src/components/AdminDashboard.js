@@ -129,6 +129,34 @@ const Dashboard = () => {
     return roles;
   };
 
+  const exportToCSV = () => {
+    const headers = ['S.No', 'Name', 'Email', 'Phone', 'Role', 'Query', 'LinkedIn'];
+    const rows = filteredDetails.map((form, index) => [
+      index + 1,
+      form.name,
+      form.email,
+      form.phone,
+      form.role,
+      form.query || 'N/A',
+      form.linkedin_url || 'N/A'
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'table_data.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
@@ -160,7 +188,7 @@ const Dashboard = () => {
               : 'bg-gray-200 text-gray-700'
               }`}
           >
-            Newest First
+            Oldest First
           </button>
           <button
             onClick={() => setSortOrder('oldest')}
@@ -169,7 +197,7 @@ const Dashboard = () => {
               : 'bg-gray-200 text-gray-700'
               }`}
           >
-            Oldest First
+            Newest First
           </button>
         </div>
 
@@ -181,6 +209,13 @@ const Dashboard = () => {
             Delete Selected ({selectedRows.length})
           </button>
         )}
+
+        <button
+          onClick={exportToCSV}
+          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+        >
+          Export to CSV
+        </button>
       </div>
 
       {/* Responsive Table */}
@@ -266,7 +301,7 @@ const Dashboard = () => {
             white-space: nowrap;
           }
 
-/* Thin scrollbar for WebKit browsers (Chrome, Safari) */
+          /* Thin scrollbar for WebKit browsers (Chrome, Safari) */
           .query-cell::-webkit-scrollbar {
             width: 1px; /* Adjust the width to make it thinner */
             height: 1px; /* Adjust the height for horizontal scrollbar */
@@ -286,7 +321,6 @@ const Dashboard = () => {
             scrollbar-width: thin; /* Makes the scrollbar thinner */
             scrollbar-color: #888 #f1f1f1; /* Thumb and track color */
           }
-
         `}
       </style>
     </div>
