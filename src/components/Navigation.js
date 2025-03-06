@@ -23,6 +23,12 @@ const Navigation = () => (
         >
           Home Page Images
         </Link>
+        <Link
+          to="/campusprogram"
+          className="px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+        >
+          Campus Program Data
+        </Link>
       </div>
     </div>
   </div>

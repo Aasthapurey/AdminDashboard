@@ -6,6 +6,7 @@ import AdminDashboard from './components/AdminDashboard';
 import AppointmentDashboard from './components/AppointmentDashboard';
 import AppointmentForm from './components/AppointmentForm';
 import ImageSection from './components/ImageSection';
+import CampusProgram from './components/CampusProgram';
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('authToken');
@@ -52,7 +53,11 @@ function App() {
             <ImageSection />
           </ProtectedRoute>
         } />
-
+        <Route path="/campusprogram" element={
+          <ProtectedRoute>
+            <CampusProgram />
+          </ProtectedRoute>
+        } />
         {/* Redirect any unknown routes to login */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
