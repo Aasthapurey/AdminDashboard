@@ -25,6 +25,8 @@ const GalleryDashboard = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [newImage, setNewImage] = useState({ image: '', description: '', order: 0 });
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [editImage, setEditImage] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -69,10 +71,15 @@ const GalleryDashboard = () => {
     }
   };
 
-  // Handle file selection and upload
-  const handleFileUpload = async (event) => {
+  // Handle file selection
+  const handleFileSelect = (event) => {
     const file = event.target.files[0];
-    if (!file) return;
+    setSelectedFile(file);
+  };
+
+  // Handle file upload
+  const handleFileUpload = async () => {
+    if (!selectedFile) return;
 
     try {
       // Reset progress
@@ -90,7 +97,7 @@ const GalleryDashboard = () => {
       }, 300);
 
       // Upload image to ImgBB
-      const uploadedImageUrl = await uploadImageToImgBB(file);
+      const uploadedImageUrl = await uploadImageToImgBB(selectedFile);
 
       if (uploadedImageUrl) {
         // Update new image state with uploaded URL
@@ -136,28 +143,17 @@ const GalleryDashboard = () => {
     }
   };
 
-  const handleUpdateOrder = async (id, newOrder) => {
-    try {
-      await apiClient.put(`https://coderhouse-448820.el.r.appspot.com/HomeBanner/${id}`, { order: newOrder });
-      fetchData();
-    } catch (error) {
-      console.error('Error updating order:', error);
-    }
+  const handleEditImage = (image) => {
+    setEditImage(image);
   };
-  const handleUpdateDescription = async (id, newDescription) => {
+
+  const handleUpdateImage = async () => {
     try {
-      await apiClient.put(`https://coderhouse-448820.el.r.appspot.com/HomeBanner/${id}`, { description: newDescription });
+      await apiClient.put(`https://coderhouse-448820.el.r.appspot.com/HomeBanner/${editImage._id}`, editImage);
       fetchData();
+      setEditImage(null);
     } catch (error) {
-      console.error('Error updating description:', error);
-    }
-  };
-  const handleUpdateURL = async (id, newUrl) => {
-    try {
-      await apiClient.put(`https://coderhouse-448820.el.r.appspot.com/HomeBanner/${id}`, { url: newUrl });
-      fetchData();
-    } catch (error) {
-      console.error('Error updating url:', error);
+      console.error('Error updating image:', error);
     }
   };
 
@@ -169,7 +165,7 @@ const GalleryDashboard = () => {
         <input 
           type="file" 
           accept="image/*" 
-          onChange={handleFileUpload} 
+          onChange={handleFileSelect} 
           className="hidden" 
           id="fileUpload"
         />
@@ -179,6 +175,13 @@ const GalleryDashboard = () => {
         >
           Choose Image
         </label>
+        <span>{selectedFile ? selectedFile.name : 'No file selected'}</span>
+        <button 
+          onClick={handleFileUpload} 
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Generate Link
+        </button>
 
         {uploadProgress > 0 && uploadProgress < 100 && (
           <div className="w-full bg-gray-200 rounded-full h-2.5">
@@ -243,30 +246,62 @@ const GalleryDashboard = () => {
               />
               <p className="text-center mt-2">{image.description}</p>
               <p className="text-center text-gray-500">Order: {image.order}</p>
-              <input 
-                type="number" 
-                value={image.order} 
-                onChange={(e) => handleUpdateOrder(image._id, Number(e.target.value))} 
-                className="border p-1 rounded w-full mt-2" 
-              />
-              <input 
-                type="text" 
-                value={image.description} 
-                onChange={(e) => handleUpdateDescription(image._id, (e.target.value))} 
-                className="border p-1 rounded w-full mt-2" 
-              />
-              <input 
-                type="text" 
-                value={image.image} 
-                onChange={(e) => handleUpdateURL(image._id, (e.target.value))} 
-                className="border p-1 rounded w-full mt-2" 
-              />
+              <button 
+                onClick={() => handleEditImage(image)} 
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2"
+              >
+                Edit
+              </button>
             </div>
           ))
         ) : (
           <p className="text-gray-500 col-span-4 text-center">No images found.</p>
         )}
       </div>
+
+      {editImage && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h3 className="text-lg font-semibold mb-4">Edit Image</h3>
+            <input 
+              type="text" 
+              placeholder="Image URL" 
+              value={editImage.image} 
+              onChange={(e) => setEditImage({ ...editImage, image: e.target.value })} 
+              className="border p-2 rounded w-full mb-2" 
+            />
+            <input 
+              type="text" 
+              placeholder="Description" 
+              value={editImage.description} 
+              onChange={(e) => setEditImage({ ...editImage, description: e.target.value })} 
+              className="border p-2 rounded w-full mb-2" 
+            />
+            <input 
+              type="number" 
+              placeholder="Order" 
+              value={editImage.order} 
+              onChange={(e) => setEditImage({ ...editImage, order: Number(e.target.value) })} 
+              className="border p-2 rounded w-full mb-2" 
+            />
+            <div className="flex justify-end gap-4">
+              <button 
+                onClick={() => setEditImage(null)} 
+                className="px-4 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleUpdateImage} 
+                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <DeleteModal 
         isOpen={showDeleteModal} 
         onClose={() => setShowDeleteModal(false)} 

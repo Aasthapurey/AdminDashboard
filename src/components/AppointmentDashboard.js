@@ -128,6 +128,36 @@ const AppointmentDashboard = () => {
     return domains;
   };
 
+  const exportToCSV = () => {
+    const headers = ['S.No', 'Full Name', 'Email', 'Phone', 'Course/Branch', 'Year of Study', 'Mentor Domain', 'Appointment Date', 'Query'];
+    const rows = filteredAppointments.map((appointment, index) => [
+      index + 1,
+      appointment.name,
+      appointment.email,
+      appointment.phone,
+      appointment.branch_course,
+      appointment.study_year,
+      appointment.mentor_domain,
+      new Date(appointment.appointment_date).toLocaleString(),
+      appointment.query || 'N/A'
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'appointments_data.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Appointment Dashboard</h1>
@@ -183,6 +213,13 @@ const AppointmentDashboard = () => {
             Delete Selected ({selectedRows.length})
           </button>
         )}
+
+        <button
+          onClick={exportToCSV}
+          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+        >
+          Export to CSV
+        </button>
       </div>
 
       {/* Appointments Table */}
