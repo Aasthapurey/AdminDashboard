@@ -54,7 +54,7 @@ const AppointmentDashboard = () => {
       const token = localStorage.getItem('authToken');
       if (!token) return;
 
-      const response1 = await apiClient.get('https://coderhouse-448820.el.r.appspot.com/Appointment/', {
+      const response1 = await apiClient.get('https://coderhouse-x1yv.onrender.com/Appointment/', {
         headers: { Authorization: `${token}` },
       });
       console.log(response1.data);
@@ -94,7 +94,7 @@ const AppointmentDashboard = () => {
       const token = localStorage.getItem('authToken');
       await Promise.all(
         selectedRows.map(id =>
-          apiClient.delete(`https://coderhouse-448820.el.r.appspot.com/Appointment/${id}`, {
+          apiClient.delete(`https://coderhouse-x1yv.onrender.com/Appointment/${id}`, {
             headers: { Authorization: `${token}` },
           })
         )

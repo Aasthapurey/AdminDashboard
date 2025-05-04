@@ -12,7 +12,7 @@ const LoginForm = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://coderhouse-448820.el.r.appspot.com/Admin/login', { username, password });
+      const response = await axios.post('https://coderhouse-x1yv.onrender.com/Admin/login', { username, password });
 
       localStorage.setItem('authToken', response.data.token);
       navigate('/appointments');

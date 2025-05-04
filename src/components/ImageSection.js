@@ -36,7 +36,7 @@ const GalleryDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const response = await apiClient.get('https://coderhouse-448820.el.r.appspot.com/HomeBanner/');
+      const response = await apiClient.get('https://coderhouse-x1yv.onrender.com/HomeBanner/');
       const sortedData = response.data.HomeBanner.sort((a, b) => (a.order || 0) - (b.order || 0));
       setImages(sortedData);
     } catch (error) {
@@ -119,7 +119,7 @@ const GalleryDashboard = () => {
   const handleDelete = async () => {
     try {
       await Promise.all(
-        selectedRows.map(id => apiClient.delete(`https://coderhouse-448820.el.r.appspot.com/HomeBanner/${id}`))
+        selectedRows.map(id => apiClient.delete(`https://coderhouse-x1yv.onrender.com/HomeBanner/${id}`))
       );
       setImages(images.filter(image => !selectedRows.includes(image._id)));
       setSelectedRows([]);
@@ -135,7 +135,7 @@ const GalleryDashboard = () => {
 
   const handleAddImage = async () => {
     try {
-      await apiClient.post('https://coderhouse-448820.el.r.appspot.com/HomeBanner/', newImage);
+      await apiClient.post('https://coderhouse-x1yv.onrender.com/HomeBanner/', newImage);
       fetchData();
       setNewImage({ image: '', description: '', order: 0 });
     } catch (error) {
@@ -149,7 +149,7 @@ const GalleryDashboard = () => {
 
   const handleUpdateImage = async () => {
     try {
-      await apiClient.put(`https://coderhouse-448820.el.r.appspot.com/HomeBanner/${editImage._id}`, editImage);
+      await apiClient.put(`https://coderhouse-x1yv.onrender.com/HomeBanner/${editImage._id}`, editImage);
       fetchData();
       setEditImage(null);
     } catch (error) {

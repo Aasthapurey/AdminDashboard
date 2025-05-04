@@ -293,7 +293,7 @@ const ProgramDashboard = () => {
       const token = localStorage.getItem('authToken');
       if (!token) return;
 
-      const response = await apiClient.get('https://coderhouse-448820.el.r.appspot.com/CampusProgramDescription/', {
+      const response = await apiClient.get('https://coderhouse-x1yv.onrender.com/CampusProgramDescription/', {
         headers: { Authorization: `${token}` },
       });
       console.log(response.data);
@@ -343,7 +343,7 @@ const ProgramDashboard = () => {
       const token = localStorage.getItem('authToken');
       await Promise.all(
         selectedRows.map(id =>
-          apiClient.delete(`https://coderhouse-448820.el.r.appspot.com/CampusProgramDescription/${id}`, {
+          apiClient.delete(`https://coderhouse-x1yv.onrender.com/CampusProgramDescription/${id}`, {
             headers: { Authorization: `${token}` },
           })
         )
@@ -390,7 +390,7 @@ const ProgramDashboard = () => {
       if (isEditing && currentProgram) {
         // Update existing program
         const response = await apiClient.put(
-          `https://coderhouse-448820.el.r.appspot.com/CampusProgramDescription/${currentProgram._id}`,
+          `https://coderhouse-x1yv.onrender.com/CampusProgramDescription/${currentProgram._id}`,
           programData,
           { headers: { Authorization: `${token}` } }
         );
@@ -398,7 +398,7 @@ const ProgramDashboard = () => {
       } else {
         // Add new program
         const response = await apiClient.post(
-          'https://coderhouse-448820.el.r.appspot.com/CampusProgramDescription/',
+          'https://coderhouse-x1yv.onrender.com/CampusProgramDescription/',
           programData,
           { headers: { Authorization: `${token}` } }
         );
